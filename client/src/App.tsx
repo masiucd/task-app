@@ -1,3 +1,5 @@
+import {MantineProvider} from "@mantine/core";
+import "@mantine/core/styles.css";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import "./App.css";
@@ -8,7 +10,9 @@ let queryClient = new QueryClient();
 function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<TaskApp />
+			<MantineProvider>
+				<TaskApp />
+			</MantineProvider>
 			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	);
