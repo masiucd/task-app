@@ -1,7 +1,0 @@
-{
-  "rules": {
-    "no-alert": "error", // Emit an error message when a call to `alert()` is found
-    "oxc/approx-constant": "warn", // Show a warning when you write a number close to a known constant
-    "no-plusplus": "off" // Allow using the `++` and `--` operators,
-  }
-}
