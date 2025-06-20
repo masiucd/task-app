@@ -1,18 +1,21 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import "./App.css"
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
+import { TaskApp } from "./components/task-app"
 
-const queryClient = new QueryClient()
+let queryClient = new QueryClient()
+
+
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TaskApp />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }
 
-function TaskApp() {
-  return <div>Task app!</div>
-}
+
 
 export default App
