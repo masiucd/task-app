@@ -1,17 +1,10 @@
-import {Badge, List, Text, ThemeIcon, Title} from "@mantine/core";
-import {useQuery} from "@tanstack/react-query";
-import {Link, createFileRoute} from "@tanstack/react-router";
+import {Badge, Container, Flex, List, Skeleton, Title} from "@mantine/core";
+import {Await, createFileRoute} from "@tanstack/react-router";
 import {z} from "zod/v4-mini";
+import {baseUrl} from "../lib/constants";
+import {sleep} from "../lib/utils";
+import {type Priority, TaskSchema} from "../schemas/task";
 
-let TodoSchema = z.object({
-	id: z.int(),
-	title: z.string(),
-	description: z.string(),
-	priority: z.enum(["LOW", "MEDIUM", "HIGH", "VITAL"]),
-	completed: z.boolean(),
-});
-
-const baseUrl = "http://0.0.0.0:8080/tasks/api/v1";
 async function fetchTodos() {
 	try {
 		let response = await fetch(baseUrl);
@@ -26,8 +19,9 @@ async function fetchTodos() {
 
 async function allTodos() {
 	try {
+		await sleep(2000); // Simulate network delay
 		let data = await fetchTodos();
-		let result = z.array(TodoSchema).safeParse(data);
+		let result = z.array(TaskSchema).safeParse(data);
 		if (result.success) {
 			return result.data;
 		}
@@ -41,60 +35,61 @@ async function allTodos() {
 	}
 }
 
-function TaskApp() {
-	let {isLoading, isError, data, error} = useQuery({
-		queryKey: ["todos"],
-		queryFn: allTodos,
-	});
-	if (isLoading) return <h1>Loading...</h1>;
-	if (isError) return <h1>Error: {error?.message ?? "Ooops!"}</h1>;
-	if (!data || data.length === 0) return <h1>No tasks found.</h1>;
+export const Route = createFileRoute("/")({
+	component: Index,
+	loader: async () => ({
+		todos: allTodos(),
+	}),
+});
+
+function Index() {
+	let data = Route.useLoaderData();
 
 	return (
-		<div className="border border-red-500 p-10">
-			<h1> TaskApp </h1>
-
-			<List withPadding className="flex flex-col gap-2">
-				{data.map((todo) => (
-					<List.Item
-						key={todo.id}
-						icon={
-							<ThemeIcon
-								color="cyan"
-								// color={
-								// 	todo.priority === "LOW"
-								// 		? "green"
-								// 		: todo.priority === "MEDIUM"
-								// 			? "yellow"
-								// 			: todo.priority === "HIGH"
-								// 				? "orange"
-								// 				: "red"
-								// }
-								size={10}
-								radius="md"
-							>
-								<Badge />
-							</ThemeIcon>
-						}
-					>
-						{/* <Link to="/tasks/1">asadasd</Link> */}
-						<Link to="/tasks/$taskId" params={{taskId: todo.id}}>
-							<Title order={2}>{todo.title}</Title>
-						</Link>
-						<Text>{todo.description}</Text>
-						<Text>Priority: {todo.priority}</Text>
-						<Text>Status: {todo.completed ? "Completed" : "Pending"}</Text>
-					</List.Item>
-				))}
-			</List>
+		<div>
+			<Title order={1}>All tasks</Title>
+			<Container size="md" className="border-2">
+				<Await promise={data.todos} fallback={<TasksLoader />}>
+					{(t) => (
+						<List>
+							{t.map((task) => (
+								<List.Item key={task.id}>
+									<strong>{task.title}</strong> -{" "}
+									<Badge autoContrast color={colorByPriority(task.priority)}>
+										{task.priority}
+									</Badge>
+								</List.Item>
+							))}
+						</List>
+					)}
+				</Await>
+			</Container>
 		</div>
 	);
 }
 
-export const Route = createFileRoute("/")({
-	component: Index,
-});
+function TasksLoader() {
+	return Array.from({length: 10}).map((_, i) => (
+		// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+		<Flex key={i} direction="column" gap={10}>
+			<Skeleton height={12} radius="xl" mb={1} />
+			<Skeleton height={8} mt={6} radius="xl" mb={1} />
+			<Skeleton height={8} mt={6} width="70%" radius="xl" mb={1} />
+		</Flex>
+	));
+}
 
-function Index() {
-	return <TaskApp />;
+function colorByPriority(priority: Priority) {
+	switch (priority) {
+		case "HIGH":
+			return "red";
+		case "MEDIUM":
+			return "yellow";
+		case "LOW":
+			return "green";
+		case "VITAL":
+			return "gray";
+		default:
+			return "gray";
+	}
 }
