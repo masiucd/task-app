@@ -1,5 +1,6 @@
-import {Badge, Container, Flex, List, Skeleton, Title} from "@mantine/core";
+import {Badge, Checkbox, Container, Flex, List, Skeleton, Text, Title} from "@mantine/core";
 import {Await, createFileRoute} from "@tanstack/react-router";
+import {useState} from "react";
 import {z} from "zod/v4-mini";
 import {baseUrl} from "../lib/constants";
 import {sleep} from "../lib/utils";
@@ -51,20 +52,38 @@ function Index() {
 			<Container size="md" className="border-2">
 				<Await promise={data.todos} fallback={<TasksLoader />}>
 					{(t) => (
-						<List>
+						<List className="flex flex-col gap-4">
 							{t.map((task) => (
-								<List.Item key={task.id}>
-									<strong>{task.title}</strong> -{" "}
-									<Badge autoContrast color={colorByPriority(task.priority)}>
-										{task.priority}
-									</Badge>
-								</List.Item>
+								<TaskItem key={task.id} task={task} />
 							))}
 						</List>
 					)}
 				</Await>
 			</Container>
 		</div>
+	);
+}
+
+function TaskItem(props: {task: z.infer<typeof TaskSchema>}) {
+	let [completed, setCompleted] = useState(props.task.completed);
+	return (
+		<List.Item key={props.task.id}>
+			<Flex align="center" gap={10}>
+				<Checkbox
+					checked={completed}
+					onChange={(e) => {
+						// TODO update the task completion status in the backend
+						// TODO optimistically update the task completion status in the UI so it feels snappier, we do not want to make too many requests to the backend
+						setCompleted(e.currentTarget.checked);
+					}}
+				/>
+				<Title order={3}>{props.task.title}</Title>
+				<Badge autoContrast color={colorByPriority(props.task.priority)} variant="light">
+					{props.task.priority}
+				</Badge>
+			</Flex>
+			<Text>{props.task.description}</Text>
+		</List.Item>
 	);
 }
 
