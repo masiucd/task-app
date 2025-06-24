@@ -1,31 +1,22 @@
 import {Badge, Checkbox, Container, Flex, List, Skeleton, Text, Title} from "@mantine/core";
+import {useMutation} from "@tanstack/react-query";
 import {Await, createFileRoute} from "@tanstack/react-router";
 import {useState} from "react";
 import {z} from "zod/v4-mini";
+import {A} from "../components/a";
 import {baseUrl} from "../lib/constants";
-import {sleep} from "../lib/utils";
 import {type Priority, TaskSchema} from "../schemas/task";
-
-async function fetchTodos() {
-	try {
-		let response = await fetch(baseUrl);
-		let data = await response.json();
-		return data;
-	} catch (error) {
-		// biome-ignore lint/suspicious/noConsole: <explanation>
-		console.error("Error fetching todos:", error);
-		throw error;
-	}
-}
 
 async function allTodos() {
 	try {
-		await sleep(2000); // Simulate network delay
-		let data = await fetchTodos();
+		let response = await fetch(baseUrl);
+		let data = await response.json();
 		let result = z.array(TaskSchema).safeParse(data);
 		if (result.success) {
 			return result.data;
 		}
+		// biome-ignore lint/suspicious/noConsole: Suppressing this warning as we want to log invalid data format
+		console.warn("Invalid data format:", result.error);
 		return [];
 	} catch (error) {
 		// biome-ignore lint/suspicious/noConsole: <explanation>
@@ -66,6 +57,18 @@ function Index() {
 
 function TaskItem(props: {task: z.infer<typeof TaskSchema>}) {
 	let [completed, setCompleted] = useState(props.task.completed);
+	let mutation = useMutation({
+		mutationFn: () => {
+			return fetch(`${baseUrl}/toggle-completed`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({id: props.task.id}),
+			}).then((res) => res.json());
+		},
+	});
+	// TODO useOptimisticState to optimistically update the task completion status in the UI
 	return (
 		<List.Item key={props.task.id}>
 			<Flex align="center" gap={10}>
@@ -75,14 +78,21 @@ function TaskItem(props: {task: z.infer<typeof TaskSchema>}) {
 						// TODO update the task completion status in the backend
 						// TODO optimistically update the task completion status in the UI so it feels snappier, we do not want to make too many requests to the backend
 						setCompleted(e.currentTarget.checked);
+						mutation.mutate();
+						// debounce(() => {
+						// }, 500);
 					}}
 				/>
-				<Title order={3}>{props.task.title}</Title>
+
+				<A to="/tasks/$taskId" params={{taskId: props.task.id}}>
+					<Title order={3}>{props.task.title}</Title>
+				</A>
 				<Badge autoContrast color={colorByPriority(props.task.priority)} variant="light">
 					{props.task.priority}
 				</Badge>
 			</Flex>
 			<Text>{props.task.description}</Text>
+			<Text>{completed ? "Completed" : "In progress"}</Text>
 		</List.Item>
 	);
 }
