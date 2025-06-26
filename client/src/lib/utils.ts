@@ -1,7 +1,3 @@
-export function sleep(ms = 5000) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 /**
  * Creates a debounced version of the provided function that delays its execution until after
  * a specified delay has elapsed since the last time it was invoked.
