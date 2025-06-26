@@ -14,12 +14,12 @@ export default defineConfig({
 		react(),
 		tailwindcss(),
 	],
-	server: {
-		port: 3333,
-	},
 	resolve: {
 		alias: {
 			"@": resolve(__dirname, "./src"),
 		},
+	},
+	server: {
+		port: 3333,
 	},
 });
