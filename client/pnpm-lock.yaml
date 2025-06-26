@@ -11,6 +11,9 @@ importers:
       '@mantine/core':
         specifier: ^8.1.1
         version: 8.1.1(@mantine/hooks@8.1.1(react@19.1.0))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@mantine/form':
+        specifier: ^8.1.2
+        version: 8.1.2(react@19.1.0)
       '@mantine/hooks':
         specifier: ^8.1.1
         version: 8.1.1(react@19.1.0)
@@ -26,12 +29,6 @@ importers:
       '@tanstack/react-router':
         specifier: ^1.121.27
         version: 1.121.27(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@tanstack/react-router-devtools':
-        specifier: ^1.121.27
-        version: 1.121.27(@tanstack/react-router@1.121.27(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@tanstack/router-core@1.121.27)(csstype@3.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(solid-js@1.9.7)(tiny-invariant@1.3.3)
-      '@tanstack/router-plugin':
-        specifier: ^1.121.29
-        version: 1.121.29(@tanstack/react-router@1.121.27(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(vite@6.3.5(@types/node@24.0.3)(jiti@2.4.2)(lightningcss@1.30.1)(sugarss@4.0.1(postcss@8.5.6))(tsx@4.20.3))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -63,6 +60,12 @@ importers:
       '@tanstack/eslint-plugin-query':
         specifier: ^5.78.0
         version: 5.78.0(eslint@9.29.0(jiti@2.4.2))(typescript@5.8.3)
+      '@tanstack/react-router-devtools':
+        specifier: ^1.121.27
+        version: 1.121.27(@tanstack/react-router@1.121.27(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@tanstack/router-core@1.121.27)(csstype@3.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(solid-js@1.9.7)(tiny-invariant@1.3.3)
+      '@tanstack/router-plugin':
+        specifier: ^1.121.29
+        version: 1.121.29(@tanstack/react-router@1.121.27(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(vite@6.3.5(@types/node@24.0.3)(jiti@2.4.2)(lightningcss@1.30.1)(sugarss@4.0.1(postcss@8.5.6))(tsx@4.20.3))
       '@types/node':
         specifier: ^24.0.3
         version: 24.0.3
@@ -570,6 +573,11 @@ packages:
       '@mantine/hooks': 8.1.1
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
+
+  '@mantine/form@8.1.2':
+    resolution: {integrity: sha512-w+PWUQPE3JDiK4ZBWN+WtfixWtt/+KavHjsSjCxIuUodzygdkV/4bWtPKYx7dFQTozWhfMVqxtORhn3no28Qwg==}
+    peerDependencies:
+      react: ^18.x || ^19.x
 
   '@mantine/hooks@8.1.1':
     resolution: {integrity: sha512-C+p9pPDPl/IMcVCN44XMa9MbuUOEJS3PG9Wklw9Z+ooJqkBnc7aXs3xTAjIsaUCinR9hMqT19cwiYb+W88leVg==}
@@ -1345,6 +1353,10 @@ packages:
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
+
+  klona@2.0.6:
+    resolution: {integrity: sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==}
+    engines: {node: '>= 8'}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -2343,6 +2355,12 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  '@mantine/form@8.1.2(react@19.1.0)':
+    dependencies:
+      fast-deep-equal: 3.1.3
+      klona: 2.0.6
+      react: 19.1.0
+
   '@mantine/hooks@8.1.1(react@19.1.0)':
     dependencies:
       react: 19.1.0
@@ -3117,6 +3135,8 @@ snapshots:
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
+
+  klona@2.0.6: {}
 
   levn@0.4.1:
     dependencies:
