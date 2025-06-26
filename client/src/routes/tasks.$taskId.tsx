@@ -2,14 +2,19 @@ import {
 	Badge,
 	Button,
 	Card,
+	Checkbox,
 	Flex,
 	Group,
 	Image,
 	Modal,
+	NativeSelect,
 	Popover,
 	Text,
+	TextInput,
+	Textarea,
 	Tooltip,
 } from "@mantine/core";
+import {useForm} from "@mantine/form";
 import {useDisclosure} from "@mantine/hooks";
 import {useMutation} from "@tanstack/react-query";
 import {Await, createFileRoute, useNavigate} from "@tanstack/react-router";
@@ -94,9 +99,77 @@ function EditModal(props: {
 	onClose: () => void;
 	task: z.infer<typeof TaskSchema>;
 }) {
+	let form = useForm({
+		mode: "uncontrolled",
+		initialValues: {
+			title: props.task.title,
+			description: props.task.description,
+			priority: props.task.priority,
+			completed: props.task.completed,
+		},
+		validate: {
+			title: (value) => (value.length <= 2 ? "Title must be at least 2 characters long" : null),
+			description: (value) =>
+				value.length <= 5 ? "Description must be at least 5 characters long" : null,
+		},
+	});
+	// TODO add mutation to update the task
+
 	return (
 		<Modal opened={props.opened} onClose={props.onClose} title={`Edit Task: ${props.task.title}`}>
-			<p>Hello</p>
+			<form
+				onSubmit={form.onSubmit((values) => {
+					console.log("Form submitted with values:", values);
+				})}
+			>
+				<Flex direction="column" gap={5}>
+					<TextInput
+						label="Title"
+						defaultValue={props.task.title}
+						key={form.key("title")}
+						placeholder="Task title"
+						required
+						mb="md"
+						{...form.getInputProps("title")}
+					/>
+					<Textarea
+						label="Description"
+						defaultValue={props.task.description}
+						key={form.key("description")}
+						placeholder="Task description"
+						required
+						minRows={3}
+						mb="md"
+						{...form.getInputProps("description")}
+					/>
+					<NativeSelect
+						key={form.key("priority")}
+						data={["Low", "Medium", "High", "Vital"]}
+						defaultValue={props.task.priority}
+						mb="md"
+						label="Priority"
+						{...form.getInputProps("priority")}
+					/>
+					<Checkbox
+						label="Complete"
+						defaultChecked={props.task.completed}
+						mb="md"
+						key={form.key("completed")}
+						// onChange={(e) => {
+						// 	form.setFieldValue("completed", e.currentTarget.checked);
+						// }}
+						{...form.getInputProps("completed", {type: "checkbox"})}
+					/>
+					<Group justify="flex-end" mt="md">
+						<Button type="submit" radius="md" color="blue">
+							Save
+						</Button>
+						<Button type="button" radius="md" variant="light" onClick={props.onClose}>
+							Cancel
+						</Button>
+					</Group>
+				</Flex>
+			</form>
 		</Modal>
 	);
 }
@@ -140,7 +213,7 @@ function DeleteTaskPopover(props: {task: z.infer<typeof TaskSchema>}) {
 			<Popover.Dropdown>
 				<Text size="xs">Are you sure you want to delete task {props.task.title}?</Text>
 				{mutation.isError && (
-					<Text size="xs" color="red">
+					<Text size="xs" c="red">
 						{mutation.error.message}
 					</Text>
 				)}
