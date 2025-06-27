@@ -13,7 +13,9 @@
       "DOM.Iterable"
     ],
     "types": [
-      "vite/client"
+      "vite/client",
+      "vitest/globals",
+      "@testing-library/jest-dom"
     ],
     /* Bundler mode */
     "moduleResolution": "bundler",
