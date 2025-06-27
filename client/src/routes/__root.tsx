@@ -1,8 +1,8 @@
-import {MantineProvider, createTheme} from "@mantine/core";
+import {createTheme, MantineProvider} from "@mantine/core";
 import "@mantine/core/styles.css";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
-import {Outlet, createRootRoute} from "@tanstack/react-router";
+import {createRootRoute, Outlet} from "@tanstack/react-router";
 import {TanStackRouterDevtools} from "@tanstack/react-router-devtools";
 import "../index.css";
 

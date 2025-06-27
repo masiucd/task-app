@@ -1,13 +1,13 @@
-import {deleteTask} from "@/api/tasks";
 import {Button, Popover, Text, Tooltip} from "@mantine/core";
 import {useMutation} from "@tanstack/react-query";
 import {useNavigate} from "@tanstack/react-router";
 import {Trash} from "lucide-react";
+import {deleteTask} from "@/api/tasks";
 import type {Task} from "../../schemas/task";
 
 export function DeleteTaskPopover(props: {task: Task}) {
-	let navigate = useNavigate();
-	let mutation = useMutation({
+	const navigate = useNavigate();
+	const mutation = useMutation({
 		mutationFn: () => deleteTask(props.task.id),
 		onSuccess: () => {
 			navigate({to: "/"});

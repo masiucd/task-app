@@ -10,11 +10,9 @@ export async function getAllTasks() {
 		if (result.success) {
 			return result.data;
 		}
-		// biome-ignore lint/suspicious/noConsole: Suppressing this warning as we want to log invalid data format
 		console.warn("Invalid data format:", result.error);
 		return [];
 	} catch (error) {
-		// biome-ignore lint/suspicious/noConsole: <explanation>
 		console.error("Error fetching all tasks:", error);
 		throw new Error(
 			`Failed to fetch tasks: ${error instanceof Error ? error.message : "Unknown error"}`,
@@ -22,7 +20,7 @@ export async function getAllTasks() {
 	}
 }
 
-export async function toggleTaskCompleted(taskId: string) {
+export async function toggleTaskCompleted(taskId: number) {
 	const response = await fetch(`${baseUrl}/toggle-completed`, {
 		method: "PUT",
 		headers: {
