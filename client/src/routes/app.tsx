@@ -1,5 +1,6 @@
-import {AppShell} from "@mantine/core";
+import {AppShell, Container, List, Title} from "@mantine/core";
 import {createFileRoute, Outlet} from "@tanstack/react-router";
+import {A} from "@/components/a";
 
 export const Route = createFileRoute("/app")({
 	component: AppLayoutComponent,
@@ -7,34 +8,50 @@ export const Route = createFileRoute("/app")({
 
 function AppLayoutComponent() {
 	return (
-		<>
-			<AppShell
-				header={{
-					height: 60,
-				}}
-				navbar={{
-					width: 300,
-					breakpoint: "sm",
-				}}
-				footer={{
-					height: 60,
-				}}
-			>
-				<AppShell.Header>header</AppShell.Header>
-				<AppShell.Navbar>navbar {/* Navbar content goes here */}</AppShell.Navbar>
+		<AppShell
+			header={{
+				height: 60,
+			}}
+			navbar={{
+				width: 200,
+				breakpoint: "sm",
+			}}
+			footer={{
+				height: 60,
+			}}
+		>
+			<AppShell.Header>
+				<Container size="lg">
+					<Title order={3}>
+						<A to="/app/all-tasks" className="text-white">
+							Task App
+						</A>
+					</Title>
+				</Container>
+			</AppShell.Header>
+			<AppShell.Navbar>
+				<List>
+					<List.Item>
+						<A to="/app/all-tasks">All Tasks</A>
+					</List.Item>
 
-				<AppShell.Main>
-					<Outlet />
-				</AppShell.Main>
+					<List.Item>
+						<A to="/about">About</A>
+					</List.Item>
+				</List>
+			</AppShell.Navbar>
 
-				<AppShell.Footer>footer {/* Footer content goes here */}</AppShell.Footer>
-			</AppShell>
-			{/* <Container
-				className="border-2 border-white flex min-h-[calc(100vh-64px)] min-w-[100dvw]"
-				component="main"
-			>
+			<AppShell.Main>
 				<Outlet />
-			</Container> */}
-		</>
+			</AppShell.Main>
+
+			<AppShell.Footer>
+				<Container size="lg">
+					<Title order={5} className="text-center">
+						&copy; {new Date().getFullYear()} Task App
+					</Title>
+				</Container>
+			</AppShell.Footer>
+		</AppShell>
 	);
 }

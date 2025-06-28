@@ -1,13 +1,12 @@
-import {Checkbox, Container, Flex, List, Skeleton, Text, Title} from "@mantine/core";
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {Button, Container, Flex, Group, List, Skeleton, Text, Title, Tooltip} from "@mantine/core";
+import {useQuery} from "@tanstack/react-query";
 import {createFileRoute} from "@tanstack/react-router";
-import {useState} from "react";
-import type {z} from "zod/v4-mini";
-import {getAllTasks, toggleTaskCompleted} from "@/api/tasks";
+import {Plus} from "lucide-react";
+import {useMemo} from "react";
+import {getAllTasks} from "@/api/tasks";
+import {TaskItem} from "@/components/task/task-item";
 import {PageWrapper} from "@/components/ui/page-wrapper";
-import {TaskBadge} from "@/components/ui/task-badge";
-import {A} from "../components/a";
-import type {TaskSchema} from "../schemas/task";
+import type {Task} from "../schemas/task";
 
 export const Route = createFileRoute("/app/all-tasks")({
 	component: RouteComponent,
@@ -28,53 +27,51 @@ function RouteComponent() {
 
 	return (
 		<PageWrapper>
-			<Title order={1}>All tasks</Title>
-			<Container size="md" className="border-2">
-				<List className="flex flex-col gap-4">
+			<Title order={1} mt={5} mb={20}>
+				All tasks
+			</Title>
+			<Container size="md" className="w-full " bg="dark" p={20} mb={10}>
+				<List className="flex flex-col gap-4" mb={10}>
 					{todos?.map((task) => (
 						<TaskItem key={task.id} task={task} />
 					))}
 				</List>
+				<Footer todos={todos || []} />
 			</Container>
-			<Flex>Footer actions can go here, like creating a new task or filtering tasks.</Flex>
 		</PageWrapper>
 	);
 }
 
-function TaskItem(props: {task: z.infer<typeof TaskSchema>}) {
-	let [completed, setCompleted] = useState(props.task.completed);
-	let queryClient = useQueryClient();
-	let mutation = useMutation({
-		mutationFn: () => toggleTaskCompleted(props.task.id),
-		onSuccess: () => {
-			// Invalidate tasks query to refetch updated data
-			queryClient.invalidateQueries({queryKey: ["tasks"]});
-		},
-	});
-	// TODO useOptimisticState to optimistically update the task completion status in the UI
+function Footer(props: {todos: Task[]}) {
+	let completedCount = useMemo(
+		() => props.todos.filter((task) => task.completed).length,
+		[props.todos],
+	);
+	let inProgressCount = useMemo(
+		() => props.todos.filter((task) => !task.completed).length,
+		[props.todos],
+	);
+	let totalCount = useMemo(() => props.todos.length, [props.todos]);
 	return (
-		<List.Item key={props.task.id}>
-			<Flex align="center" gap={10}>
-				<Checkbox
-					checked={completed}
-					onChange={(e) => {
-						// TODO update the task completion status in the backend
-						// TODO optimistically update the task completion status in the UI so it feels snappier, we do not want to make too many requests to the backend
-						setCompleted(e.currentTarget.checked);
-						mutation.mutate();
-						// debounce(() => {
-						// }, 500);
-					}}
-				/>
-
-				<A to="/tasks/$taskId" params={{taskId: props.task.id}}>
-					<Title order={3}>{props.task.title}</Title>
-				</A>
-				<TaskBadge priority={props.task.priority} />
-			</Flex>
-			<Text>{props.task.description}</Text>
-			<Text>{completed ? "Completed" : "In progress"}</Text>
-		</List.Item>
+		<Flex justify="space-between">
+			<Group>
+				<Text size="sm" c="dimmed">
+					Total tasks: {totalCount}
+				</Text>
+				<Text size="sm" c="dimmed">
+					Completed tasks: {completedCount}
+				</Text>
+				<Text size="sm" c="dimmed">
+					In progress tasks: {inProgressCount}
+				</Text>
+			</Group>
+			<Tooltip label="Add new task">
+				<Button variant="outline" size="xs" radius="sm">
+					{/* TODO add modal to add a new task */}
+					<Plus />
+				</Button>
+			</Tooltip>
+		</Flex>
 	);
 }
 
