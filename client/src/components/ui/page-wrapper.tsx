@@ -13,7 +13,7 @@ export function PageWrapper(props: PropsWithChildren<Props>) {
 			component="section"
 			size="lg"
 			fluid={props.fluid}
-			className={cn("border-2 border-red-400 flex flex-col flex-1", props.className)}
+			className={cn("flex flex-col flex-1", props.className)}
 		>
 			{props.children}
 		</Container>

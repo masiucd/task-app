@@ -1,9 +1,11 @@
-import {Button, Container, Flex, Group, List, Skeleton, Text, Title, Tooltip} from "@mantine/core";
+import {Button, Container, Flex, Group, List, Skeleton, Text, Title} from "@mantine/core";
+import {useDisclosure} from "@mantine/hooks";
 import {useQuery} from "@tanstack/react-query";
 import {createFileRoute} from "@tanstack/react-router";
 import {Plus} from "lucide-react";
 import {useMemo} from "react";
 import {getAllTasks} from "@/api/tasks";
+import {AddNewTaskModal} from "@/components/task/add-new-task";
 import {TaskItem} from "@/components/task/task-item";
 import {PageWrapper} from "@/components/ui/page-wrapper";
 import type {Task} from "../schemas/task";
@@ -27,9 +29,12 @@ function RouteComponent() {
 
 	return (
 		<PageWrapper>
-			<Title order={1} mt={5} mb={20}>
-				All tasks
-			</Title>
+			<Flex direction="column" mt={5} mb={20}>
+				<Title order={1}>All tasks</Title>
+				<Text size="sm" c="dimmed">
+					Manage your tasks efficiently and effectively.
+				</Text>
+			</Flex>
 			<Container size="md" className="w-full " bg="dark" p={20} mb={10}>
 				<List className="flex flex-col gap-4" mb={10}>
 					{todos?.map((task) => (
@@ -61,17 +66,28 @@ function Footer(props: {todos: Task[]}) {
 				<Text size="sm" c="dimmed">
 					Completed tasks: {completedCount}
 				</Text>
-				<Text size="sm" c="dimmed">
-					In progress tasks: {inProgressCount}
-				</Text>
+				<Text c="dimmed">In progress tasks: {inProgressCount}</Text>
 			</Group>
-			<Tooltip label="Add new task">
-				<Button variant="outline" size="xs" radius="sm">
-					{/* TODO add modal to add a new task */}
-					<Plus />
-				</Button>
-			</Tooltip>
+			<AddNewTaskButton />
 		</Flex>
+	);
+}
+
+function AddNewTaskButton() {
+	let [opened, {open, close}] = useDisclosure(false);
+	return (
+		<>
+			<AddNewTaskModal opened={opened} onClose={close} />
+			<Button
+				variant="light"
+				leftSection={<Plus size={16} />}
+				size="xs"
+				onClick={open}
+				className="flex items-center gap-2"
+			>
+				Add Task
+			</Button>
+		</>
 	);
 }
 

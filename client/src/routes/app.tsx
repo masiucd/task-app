@@ -30,15 +30,16 @@ function AppLayoutComponent() {
 				</Container>
 			</AppShell.Header>
 			<AppShell.Navbar>
-				<List>
-					<List.Item>
-						<A to="/app/all-tasks">All Tasks</A>
-					</List.Item>
-
-					<List.Item>
-						<A to="/about">About</A>
-					</List.Item>
-				</List>
+				<Container className="flex h-full justify-center">
+					<List pt={50}>
+						<List.Item>
+							<A to="/app/all-tasks">All Tasks</A>
+						</List.Item>
+						<List.Item>
+							<A to="/app/about">About</A>
+						</List.Item>
+					</List>
+				</Container>
 			</AppShell.Navbar>
 
 			<AppShell.Main>

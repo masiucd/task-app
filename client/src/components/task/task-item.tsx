@@ -1,4 +1,4 @@
-import {Badge, Checkbox, Flex, Group, List, Text, Title, Tooltip} from "@mantine/core";
+import {Badge, Checkbox, Flex, List, Text, Title, Tooltip} from "@mantine/core";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {CheckIcon, Circle} from "lucide-react";
 import {useState} from "react";
@@ -17,7 +17,6 @@ export function TaskItem(props: {task: Task}) {
 			queryClient.invalidateQueries({queryKey: ["tasks"]});
 		},
 	});
-	// TODO useOptimisticState to optimistically update the task completion status in the UI
 	return (
 		<List.Item key={props.task.id}>
 			<Flex align="center" gap={10}>
@@ -33,24 +32,25 @@ export function TaskItem(props: {task: Task}) {
 					}}
 				/>
 
-				<A to="/tasks/$taskId" params={{taskId: props.task.id}}>
-					<Title order={3}>{props.task.title}</Title>
-				</A>
+				<Flex justify="center" align="center" gap={5}>
+					<A to="/tasks/$taskId" params={{taskId: props.task.id}}>
+						<Title order={3}>{props.task.title}</Title>
+					</A>
+					<Badge variant="light" radius="xs" color={completed ? "green" : "gray"} p={10} size="xs">
+						<Tooltip
+							label={completed ? "Task completed" : "Uncompleted task"}
+							withArrow
+							position="right"
+						>
+							{completed ? <CheckIcon size={14} /> : <Circle size={14} />}
+						</Tooltip>
+					</Badge>
+				</Flex>
 				<TaskBadge priority={props.task.priority} />
 			</Flex>
-			<Group pl={5} mt={5}>
-				<Text>{props.task.description}</Text>
-
-				<Badge variant="light" radius="xs">
-					<Tooltip
-						label={completed ? "Task completed" : "Uncompleted task"}
-						withArrow
-						position="right"
-					>
-						{completed ? <CheckIcon size={20} /> : <Circle size={20} />}
-					</Tooltip>
-				</Badge>
-			</Group>
+			<Text pl={5} mt={5}>
+				{props.task.description}
+			</Text>
 		</List.Item>
 	);
 }

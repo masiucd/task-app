@@ -58,6 +58,13 @@ let theme = createTheme({
 			"#0D47A1",
 		],
 	},
+	radius: {
+		xs: "4px",
+		sm: "6px",
+		md: "8px",
+		lg: "10px",
+		xl: "12px",
+	},
 });
 
 export const Route = createRootRoute({

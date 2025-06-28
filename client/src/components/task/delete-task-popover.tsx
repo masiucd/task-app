@@ -10,7 +10,7 @@ export function DeleteTaskPopover(props: {task: Task}) {
 	const mutation = useMutation({
 		mutationFn: () => deleteTask(props.task.id),
 		onSuccess: () => {
-			navigate({to: "/"});
+			navigate({to: "/app/all-tasks"});
 		},
 		mutationKey: ["deleteTask", props.task.id],
 	});
