@@ -1,25 +1,8 @@
 import {screen} from "@testing-library/react";
-// Mock window.matchMedia for Mantine compatibility in tests
-import {describe, expect, it, vi} from "vitest";
+import {describe, expect, it} from "vitest";
 import type {Priority} from "@/schemas/task";
 import {renderWithProviders} from "@/test/utils";
 import {TaskBadge} from "./task-badge";
-
-beforeAll(() => {
-	Object.defineProperty(window, "matchMedia", {
-		writable: true,
-		value: (query: string) => ({
-			matches: false,
-			media: query,
-			onchange: null,
-			addEventListener: vi.fn(),
-			removeEventListener: vi.fn(),
-			dispatchEvent: vi.fn(),
-			addListener: vi.fn(), // deprecated
-			removeListener: vi.fn(), // deprecated
-		}),
-	});
-});
 
 describe("TaskBadge", () => {
 	it("renders the priority text", () => {

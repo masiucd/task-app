@@ -1,5 +1,5 @@
-import { describe, expect, it } from "vitest";
-import { type Priority, type Task, TaskSchema } from "./task";
+import {describe, expect, it} from "vitest";
+import {type Priority, type Task, TaskSchema} from "./task";
 
 describe("TaskSchema", () => {
 	it("validates a correct task object", () => {
