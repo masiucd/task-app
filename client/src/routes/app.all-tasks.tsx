@@ -15,11 +15,7 @@ export const Route = createFileRoute("/app/all-tasks")({
 });
 
 function RouteComponent() {
-	let {
-		data: todos,
-		isLoading,
-		error,
-	} = useQuery({
+	let {data, isLoading, error} = useQuery({
 		queryKey: ["tasks"],
 		queryFn: getAllTasks,
 	});
@@ -37,11 +33,11 @@ function RouteComponent() {
 			</Flex>
 			<Container size="md" className="w-full " bg="dark" p={20} mb={10}>
 				<List className="flex flex-col gap-4" mb={10}>
-					{todos?.map((task) => (
+					{data?.map((task) => (
 						<TaskItem key={task.id} task={task} />
 					))}
 				</List>
-				<Footer todos={todos || []} />
+				<Footer todos={data ?? []} />
 			</Container>
 		</PageWrapper>
 	);

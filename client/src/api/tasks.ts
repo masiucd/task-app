@@ -6,7 +6,7 @@ export async function getAllTasks() {
 	try {
 		const response = await fetch(baseUrl);
 		const data = await response.json();
-		const result = z.array(TaskSchema).safeParse(data);
+		const result = z.array(TaskSchema).safeParse(data.data);
 		if (result.success) {
 			return result.data;
 		}

@@ -1,5 +1,3 @@
-import {updateTask} from "@/api/tasks";
-import {type Task, TaskSchema} from "@/schemas/task";
 import {
 	Button,
 	Checkbox,
@@ -7,17 +5,15 @@ import {
 	Group,
 	Modal,
 	NativeSelect,
-	TextInput,
 	Textarea,
+	TextInput,
 } from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {updateTask} from "@/api/tasks";
+import {type Task, TaskSchema} from "@/schemas/task";
 
-export function EditTaskModal(props: {
-	opened: boolean;
-	onClose: () => void;
-	task: Task;
-}) {
+export function EditTaskModal(props: {opened: boolean; onClose: () => void; task: Task}) {
 	let queryClient = useQueryClient();
 	let form = useForm({
 		mode: "uncontrolled",
@@ -34,24 +30,18 @@ export function EditTaskModal(props: {
 				value.length <= 5 ? "Description must be at least 5 characters long" : null,
 		},
 	});
-	// TODO add mutation to update the task
+
 	let mutation = useMutation({
 		mutationFn: (formData: Task) => updateTask(formData, props.task.id),
 		mutationKey: ["updateTask", props.task.id],
-
-		onSuccess: (data) => {
-			// biome-ignore lint/suspicious/noConsole: <explanation>
-			console.log("Task updated successfully:", data);
-
+		onSuccess: () => {
 			// Invalidate and refetch relevant queries
 			queryClient.invalidateQueries({queryKey: ["tasks"]});
 			queryClient.invalidateQueries({queryKey: ["task", props.task.id]});
-
-			// Close the modal
+			form.reset();
 			props.onClose();
 		},
 		onError: (error) => {
-			// biome-ignore lint/suspicious/noConsole: <explanation>
 			console.error("Error updating task:", error);
 		},
 	});

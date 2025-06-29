@@ -24,11 +24,8 @@ export function AddNewTaskModal(props: {opened: boolean; onClose: () => void}) {
 		onError: (error) => {
 			console.error("Error creating task:", error);
 		},
-		onSuccess: (data) => {
-			console.log("Data from mutation:", data);
-			// Invalidate tasks query to refetch updated data
+		onSuccess: () => {
 			queryClient.invalidateQueries({queryKey: ["tasks"]});
-			// queryClient.invalidateQueries({queryKey: ["task", props.task.id]});
 			form.reset();
 			props.onClose();
 		},
