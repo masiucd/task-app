@@ -24,7 +24,7 @@ fun Application.configureSerialization(repository: TaskRepository) {
         val tasks = repository.allTasks()
         call.respond(HttpStatusCode.OK, ResponseWrapper<List<Task>>(
           ok = false,
-          message = "Task data is required",
+          message = "Task data list",
           data = tasks))
       }
 

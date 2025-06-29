@@ -1,6 +1,6 @@
 # Task Management App
 
-A modern, full-featured task management application built with React, TypeScript, and a robust tech stack. This client application provides an intuitive interface for managing tasks with priority levels, completion tracking, and comprehensive CRUD operations.
+A basic task management application built with React, TypeScript, and modern web technologies. This app allows users to create, manage, and track tasks with a focus on simplicity and usability.
 
 ## ✨ Features
 

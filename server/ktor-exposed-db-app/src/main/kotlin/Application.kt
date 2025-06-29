@@ -26,8 +26,4 @@ fun Application.module() {
   val task = TaskRepositoryImpl()
   configureSerialization(task)
   configureDatabases()
-  //  TODO REMOVE
-
-  
-  configureRouting()
 }
