@@ -1,4 +1,5 @@
-import {AppShell, Container, List, Title} from "@mantine/core";
+import {AppShell, Burger, Container, Group, List, Title} from "@mantine/core";
+import {useDisclosure} from "@mantine/hooks";
 import {createFileRoute, Outlet} from "@tanstack/react-router";
 import {A} from "@/components/a";
 
@@ -7,26 +8,29 @@ export const Route = createFileRoute("/app")({
 });
 
 function AppLayoutComponent() {
+	const [opened, {toggle}] = useDisclosure();
+
 	return (
 		<AppShell
 			header={{
 				height: 60,
 			}}
-			navbar={{
-				width: 200,
-				breakpoint: "sm",
-			}}
+			navbar={{width: 300, breakpoint: "sm", collapsed: {mobile: !opened}}}
 			footer={{
 				height: 60,
 			}}
+			withBorder={false}
 		>
 			<AppShell.Header>
 				<Container size="lg">
-					<Title order={3}>
-						<A to="/app/all-tasks" className="text-white">
-							Task App
-						</A>
-					</Title>
+					<Group h="100%" px="md">
+						<Title order={3} className="flex items-center justify-center gap-2">
+							<Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+							<A to="/app/all-tasks" className="text-white">
+								Task App
+							</A>
+						</Title>
+					</Group>
 				</Container>
 			</AppShell.Header>
 			<AppShell.Navbar>
