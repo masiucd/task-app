@@ -1,16 +1,17 @@
-import {fetchTaskById} from "@/api/tasks";
-import {DeleteTaskPopover} from "@/components/task/delete-task-popover";
-import {EditTaskModal} from "@/components/task/edit-task-modal";
-import {TaskBadge} from "@/components/ui/task-badge";
-import type {Task} from "@/schemas/task";
 import {Button, Card, Flex, Group, Text, Tooltip} from "@mantine/core";
 import {useDisclosure} from "@mantine/hooks";
 import {useQuery} from "@tanstack/react-query";
 import {createFileRoute} from "@tanstack/react-router";
 import {Pencil} from "lucide-react";
 import {z} from "zod/v4-mini";
+import {fetchTaskById} from "@/api/tasks";
+import {DeleteTaskPopover} from "@/components/task/delete-task-popover";
+import {EditTaskModal} from "@/components/task/edit-task-modal";
+import {PageWrapper} from "@/components/ui/page-wrapper";
+import {TaskBadge} from "@/components/ui/task-badge";
+import type {Task} from "@/schemas/task";
 
-export const Route = createFileRoute("/tasks/$taskId")({
+export const Route = createFileRoute("/app/$taskId")({
 	params: {
 		parse: (params) => ({
 			taskId: z.number().parse(Number(params.taskId)),
@@ -45,9 +46,9 @@ function TaskItemRoute() {
 function TaskItem(props: {task: Task}) {
 	let [opened, {open, close}] = useDisclosure(false);
 	return (
-		<>
+		<PageWrapper className="justify-center md:min-h-[30dvh]">
 			<EditTaskModal opened={opened} onClose={close} task={props.task} />
-			<Card shadow="sm" padding="lg" radius="md" withBorder>
+			<Card shadow="sm" padding="lg" radius="md" withBorder className="w-full">
 				<Card.Section p="md">
 					<Flex justify="space-between" align="center" mb="md">
 						<Text size="lg" fw={700}>
@@ -76,6 +77,6 @@ function TaskItem(props: {task: Task}) {
 					<DeleteTaskPopover task={props.task} />
 				</Flex>
 			</Card>
-		</>
+		</PageWrapper>
 	);
 }

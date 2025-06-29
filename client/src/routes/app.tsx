@@ -19,7 +19,7 @@ function AppLayoutComponent() {
 			footer={{
 				height: 60,
 			}}
-			withBorder={false}
+			// withBorder={false}
 		>
 			<AppShell.Header>
 				<Container size="lg">
@@ -37,10 +37,14 @@ function AppLayoutComponent() {
 				<Container className="flex h-full justify-center">
 					<List pt={50}>
 						<List.Item>
-							<A to="/app/all-tasks">All Tasks</A>
+							<A size="lg" to="/app/all-tasks">
+								All Tasks
+							</A>
 						</List.Item>
 						<List.Item>
-							<A to="/app/about">About</A>
+							<A size="lg" to="/app/about">
+								About
+							</A>
 						</List.Item>
 					</List>
 				</Container>

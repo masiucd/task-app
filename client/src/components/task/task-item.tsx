@@ -29,7 +29,7 @@ export function TaskItem(props: {task: Task}) {
 				/>
 
 				<Flex justify="center" align="center" gap={5} opacity={completed ? 0.5 : 1}>
-					<A to="/tasks/$taskId" params={{taskId: props.task.id}}>
+					<A to="/app/$taskId" params={{taskId: props.task.id}}>
 						<Title className={cn(completed && "line-through")} order={3}>
 							{props.task.title}
 						</Title>

@@ -31,28 +31,28 @@ function RouteComponent() {
 					Manage your tasks efficiently and effectively.
 				</Text>
 			</Flex>
-			<Container size="md" className="w-full " bg="dark" p={20} mb={10}>
+			<Container size="lg" className="w-full" bg="dark" p={20} mb={10}>
 				<List className="flex flex-col gap-4" mb={10}>
 					{data?.map((task) => (
 						<TaskItem key={task.id} task={task} />
 					))}
 				</List>
-				<Footer todos={data ?? []} />
+				<Footer tasks={data ?? []} />
 			</Container>
 		</PageWrapper>
 	);
 }
 
-function Footer(props: {todos: Task[]}) {
+function Footer(props: {tasks: Task[]}) {
 	let completedCount = useMemo(
-		() => props.todos.filter((task) => task.completed).length,
-		[props.todos],
+		() => props.tasks.filter((task) => task.completed).length,
+		[props.tasks],
 	);
 	let inProgressCount = useMemo(
-		() => props.todos.filter((task) => !task.completed).length,
-		[props.todos],
+		() => props.tasks.filter((task) => !task.completed).length,
+		[props.tasks],
 	);
-	let totalCount = useMemo(() => props.todos.length, [props.todos]);
+	let totalCount = useMemo(() => props.tasks.length, [props.tasks]);
 	return (
 		<Flex justify="space-between">
 			<Group>
