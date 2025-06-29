@@ -30,6 +30,7 @@ dependencies {
   implementation(libs.ktor.server.config.yaml)
   implementation(libs.exposed.dao)
   implementation("io.ktor:ktor-server-cors:3.2.0") // Adjust version as needed
+  implementation("io.github.cdimascio:dotenv-kotlin:6.4.0") // Check for the latest version
 
 
   testImplementation(libs.ktor.server.test.host)

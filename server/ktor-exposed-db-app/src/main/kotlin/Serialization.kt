@@ -22,54 +22,61 @@ fun Application.configureSerialization(repository: TaskRepository) {
     route("/tasks/api/v1") {
       get {
         val tasks = repository.allTasks()
-        call.respond(HttpStatusCode.OK, ResponseWrapper<List<Task>>(
-          ok = false,
-          message = "Task data list",
-          data = tasks))
+        call.respond(HttpStatusCode.OK,
+                     ResponseWrapper<List<Task>>(
+                       ok = false,
+                       message = "Task data list",
+                       data = tasks))
       }
 
       get("/{title}") {
         val titleParam = call.parameters["title"]
         if (titleParam == null) {
-          call.respond(HttpStatusCode.BadRequest, ResponseWrapper<Nothing>(
-            ok = false,
-            message = "Title param is required"))
+          call.respond(HttpStatusCode.BadRequest,
+                       ResponseWrapper<Nothing>(
+                         ok = false,
+                         message = "Title param is required"))
           return@get
         }
         val task = repository.taskByTitle(titleParam)
         if (task == null) {
-          call.respond(HttpStatusCode.NotFound, ResponseWrapper<Nothing>(
-            ok = false,
-            message = "Task can't be found"))
+          call.respond(HttpStatusCode.NotFound,
+                       ResponseWrapper<Nothing>(
+                         ok = false,
+                         message = "Task can't be found"))
           return@get
         }
-        call.respond(HttpStatusCode.OK, ResponseWrapper<Task>(
-          ok = false,
-          message = "Task data is required",
-          data = task))
+        call.respond(HttpStatusCode.OK,
+                     ResponseWrapper<Task>(
+                       ok = false,
+                       message = "Task data is required",
+                       data = task))
       }
 
 
       get("/task/{id}") {
         val idParam = call.parameters["id"]
         if (idParam == null) {
-          call.respond(HttpStatusCode.BadRequest, ResponseWrapper<Nothing>(
-            ok = false,
-            message = "ID is required"))
+          call.respond(HttpStatusCode.BadRequest,
+                       ResponseWrapper<Nothing>(
+                         ok = false,
+                         message = "ID is required"))
           return@get
         }
         val id = idParam.toIntOrNull()
         if (id == null) {
-          call.respond(HttpStatusCode.BadRequest, ResponseWrapper<Nothing>(
-            ok = false,
-            message = "ID has wrong type"))
+          call.respond(HttpStatusCode.BadRequest,
+                       ResponseWrapper<Nothing>(
+                         ok = false,
+                         message = "ID has wrong type"))
           return@get
         }
         val task = repository.taskById(id)
         if (task == null) {
-          call.respond(HttpStatusCode.NotFound, ResponseWrapper<Nothing>(
-            ok = false,
-            message = "Task with id $id not found"))
+          call.respond(HttpStatusCode.NotFound,
+                       ResponseWrapper<Nothing>(
+                         ok = false,
+                         message = "Task with id $id not found"))
           return@get
         }
         call.respond(HttpStatusCode.OK, task)
@@ -90,18 +97,20 @@ fun Application.configureSerialization(repository: TaskRepository) {
         val priorityResult = runCatching { Priority.valueOf(priorityParam.uppercase()) }
         val priority = priorityResult.getOrNull()
         if (priority == null) {
-          call.respond(HttpStatusCode.BadRequest, ResponseWrapper<Nothing>(
-            ok = false,
-            message = "Priority must be one of: HIGH, MEDIUM, LOW, VITAL"))
+          call.respond(HttpStatusCode.BadRequest,
+                       ResponseWrapper<Nothing>(
+                         ok = false,
+                         message = "Priority must be one of: HIGH, MEDIUM, LOW, VITAL"))
           return@get
         }
 
         val tasks = repository.tasksByPriority(priority)
-        call.respond(HttpStatusCode.OK, ResponseWrapper<List<Task>>(
-          ok = true,
-          message = "Tasks with priority $priority",
-          data = tasks
-        ))
+        call.respond(HttpStatusCode.OK,
+                     ResponseWrapper<List<Task>>(
+                       ok = true,
+                       message = "Tasks with priority $priority",
+                       data = tasks
+                     ))
 
       }
 
@@ -228,16 +237,18 @@ fun Application.configureSerialization(repository: TaskRepository) {
         }
         val ok = repository.deleteTask(id)
         if (!ok) {
-          call.respond(HttpStatusCode.NotFound, ResponseWrapper<Nothing>(
-            ok = false,
-            message = "Task with id $id not found"
-          ))
+          call.respond(HttpStatusCode.NotFound,
+                       ResponseWrapper<Nothing>(
+                         ok = false,
+                         message = "Task with id $id not found"
+                       ))
           return@delete
         }
-        call.respond(HttpStatusCode.OK, ResponseWrapper<Boolean>(
-          ok = true,
-          message = "Task with id $id deleted successfully",
-          data = true))
+        call.respond(HttpStatusCode.OK,
+                     ResponseWrapper<Boolean>(
+                       ok = true,
+                       message = "Task with id $id deleted successfully",
+                       data = true))
         return@delete
       }
 

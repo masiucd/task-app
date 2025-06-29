@@ -34,3 +34,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+#all .env
+.env
+#all .env files in the root directory
+.env.*
